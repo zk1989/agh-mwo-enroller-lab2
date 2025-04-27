@@ -16,8 +16,15 @@ public class ParticipantService {
         connector = DatabaseConnector.getInstance();
     }
 
-    public Collection<Participant> getAll() {
+    public Collection<Participant> getAll(String sortOrder, String key) {
         String hql = "FROM Participant";
+
+        hql += " WHERE login LIKE '%" + key + "%'";
+
+        if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+            hql += " ORDER BY login " + sortOrder;
+        }
+
         Query query = connector.getSession().createQuery(hql);
         return query.list();
     }
